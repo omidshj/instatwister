@@ -5,7 +5,7 @@ function instatwister_setting_menu() {
 add_action('admin_menu', 'instatwister_setting_menu');
 
 function instatwister_setting(){
-
+  print_r ( wp_get_schedules() );
   if($_POST['instatwister_setting']){
     // print_r($_POST['instatwister_setting']);
     // update_option('dw_quotes', serialize($quotes));
@@ -18,7 +18,7 @@ function instatwister_setting(){
     update_option('instatwister_setting', $_POST['instatwister_setting'] );
   }
   $setting = get_option('instatwister_setting');
-  print_r($setting);
+  // print_r($setting);
   $products = wc_get_products();
 
   ?>
@@ -40,6 +40,7 @@ function instatwister_setting(){
         <th>وضعیت</th>
         <th>سرور</th>
         <th>ای پی آی</th>
+        <th>توکن ای پی آی</th>
         <th>شماره سرویس</th>
         <th>تعداد</th>
       </tr>
@@ -54,6 +55,7 @@ function instatwister_setting(){
               <option value="ccc" <?= (isset($setting[$product_id]['api']) && $setting[$product_id]['api'] == "ccc" )? 'selected': ''  ?> >ccc</option>
             </select>
           </td>
+          <td><input type="text" name="instatwister_setting[<?= $product_id ?>][server]" value="<?= $setting[$product_id]['server'] ?>" placeholder="توکن ای پی آی"></td>
           <td><input type="text" name="instatwister_setting[<?= $product_id ?>][service_id]" value="<?= $setting[$product_id]['service_id'] ?>" placeholder="شماره سرویس"></td>
           <td><input type="text" name="instatwister_setting[<?= $product_id ?>][count]" value="<?= $setting[$product_id]['count'] ?>" placeholder="تعداد"></td>
         </tr>

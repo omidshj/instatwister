@@ -24,6 +24,8 @@ Text Domain: Sanop
 
 include ('setting.php');
 include ('orders.php');
+include ('report-cron.php');
+include ('stat-cron.php');
 
 
 function instatwister_payment_complete( $order_id ) {
@@ -91,9 +93,13 @@ function instatwister_payment_complete( $order_id ) {
 // woocommerce_payment_complete
 add_action( 'woocommerce_order_status_changed', 'instatwister_payment_complete', 10, 1 );
 
-function instatwister_create_db() {
-  global $wpdb;
+function instatwister_activation() {
+  // $txt = "instatwister actived";
+  // $myfile = file_put_contents('../wp-content/plugins/instatwister/readme.md', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+  // $txt = "instatwister";
+  // $myfile = file_put_contents('readme.md', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
 
+  global $wpdb;
   $charset_collate = $wpdb->get_charset_collate();
 	$table_name = $wpdb->prefix . 'instatwister';
 	$sql = "CREATE TABLE $table_name (
@@ -111,6 +117,40 @@ function instatwister_create_db() {
 	) $charset_collate;";
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
+
+
+  $txt = "instatwister actived crons";
+  $myfile = file_put_contents('readme.md', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
+
+  if (! wp_next_scheduled ( 'instatwister_report_crons_event' ))
+    wp_schedule_event(time(), 'seven', 'instatwister_report_crons_event');
+  if (! wp_next_scheduled ( 'instatwister_stat_crons_event' ))
+    wp_schedule_event(time(), 'seven', 'instatwister_stat_crons_event');
+
 }
-register_activation_hook( __FILE__, 'instatwister_create_db' );
+register_activation_hook( __FILE__, 'instatwister_activation' );
+
+function instatwister_deactivation() {
+	wp_clear_scheduled_hook('instatwister_report_crons_event');
+	wp_clear_scheduled_hook('instatwister_stat_crons_event');
+}
+register_deactivation_hook(__FILE__, 'instatwister_deactivation');
+
+// function instatwister_crons() {
+//
+//
+// }
+// register_activation_hook(__FILE__, 'instatwister_crons');
+
+function instatwister_seven_min( $schedules ) {
+	// add a 'weekly' schedule to the existing set
+	$schedules['seven'] = array(
+		'interval' => 7, //420,
+		'display' => __('Seven Minutes')
+	);
+	return $schedules;
+
+}
+add_filter( 'cron_schedules', 'instatwister_seven_min' );
+
 ?>
