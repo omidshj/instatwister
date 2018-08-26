@@ -58,8 +58,8 @@ function instatwister_payment_complete( $order_id ) {
     }
   }
 }
-// add_action( 'woocommerce_payment_complete', 'instatwister_payment_complete', 10, 1 );
-add_action( 'woocommerce_order_status_changed', 'instatwister_payment_complete', 10, 1 );
+add_action( 'woocommerce_payment_complete', 'instatwister_payment_complete', 10, 1 );
+// add_action( 'woocommerce_order_status_changed', 'instatwister_payment_complete', 10, 1 );
 
 function instatwister_activation() {
   global $wpdb;
