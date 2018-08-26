@@ -11,7 +11,8 @@ you can set each product attribute to connect server like:
 + API
 + Count
 
-## instatwister orders
+### instatwister orders
 you can see orders an their stats
-user id date
-user id date
+
+### Cron jobs
+see this [vide](https://www.youtube.com/watch?v=DDMfiWkhUaA) to create real cron job on cpanel

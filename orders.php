@@ -136,14 +136,10 @@ function instatwister_orders(){
       if (times.length) {
         setInterval(function(){
           times.each(function(){
-            // var t = parseInt(jQuery(this).attr('time')) - 1;
             jQuery(this).attr('time', parseInt(jQuery(this).attr('time')) - 1 )
-            // console.log(t);
             if (jQuery(this).attr('time') < 0) location.reload();
-            // jQuery(this).attr('time', t)
             jQuery(this).attr('value', 'اجرا ثبت (' + jQuery(this).attr('time') + ')');
           });
-          // alert(register.attr('t'));
         }, 1000)
       }
     });

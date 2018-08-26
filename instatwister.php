@@ -13,10 +13,11 @@ Author URI: http://hooraweb.com
 Text Domain: instatwister
 */
 
+include ('api.php');
 include ('setting.php');
 include ('orders.php');
-include ('report-cron.php');
-include ('stat-cron.php');
+// include ('report-cron.php');
+// include ('stat-cron.php');
 
 
 function instatwister_payment_complete( $order_id ) {
@@ -99,4 +100,21 @@ function instatwister_seven_min( $schedules ) {
 }
 add_filter( 'cron_schedules', 'instatwister_seven_min' );
 
+function instatwister_report_crons() {
+  global $wpdb;
+  $orders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}instatwister WHERE status = 0 LIMIT 7", OBJECT );
+  foreach ($orders as $order)
+    if ($order->api == 'jap')
+      japApiAdd($order);
+}
+add_action('instatwister_report_crons_event', 'instatwister_report_crons');
+
+function instatwister_stat_crons() {
+  global $wpdb;
+  $orders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}instatwister WHERE status = 1 LIMIT 7", OBJECT );
+  foreach ($orders as $order)
+    if ($order->api == 'jap')
+      japApiStatus($order);
+}
+add_action('instatwister_stat_crons_event', 'instatwister_stat_crons');
 ?>
