@@ -1,52 +1,42 @@
 <?php
+require_once ("api.php");
 function instatwister_report_crons() {
-  // global $wpdb;
-  // $orders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}instatwister where status = 0", OBJECT );
-  // foreach ($orders as $order) {
-  //   if ($order->api == 'jap')
-  //     instatwister_jap_add($order);
-  // }
-  // $txt = "user id date";
-  // $myfile = file_put_contents('readme.md', $txt.PHP_EOL , FILE_APPEND | LOCK_EX);
-
   global $wpdb;
-  // $wpdb->update(
+  $orders = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}instatwister WHERE status = 0 LIMIT 7", OBJECT );
+  foreach ($orders as $order) {
+    if ($order->api == 'jap') {
+      japApiAdd($order);
+    }
+  }
+
+  // $wpdb->insert(
   //   $wpdb->prefix.'instatwister',
   //   array(
-  //     'status' => 22,
-  //   ),
-  //   array(
-  //     'id' => 1
+  //     'order_id' => 111,
+  //     'product_id' => 222,
+  //     'link' => '333',
+  //     'server' => '444',
+  //     'api' =>  '555',
+  //     'service_id' =>  '666',
+  //     'count' =>  777,
+  //     'status' => 1,
   //   )
   // );
-  $wpdb->insert(
-    $wpdb->prefix.'instatwister',
-    array(
-      'order_id' => 111,
-      'product_id' => 222,
-      'link' => '333',
-      'server' => '444',
-      'api' =>  '555',
-      'service_id' =>  '666',
-      'count' =>  777,
-      'status' => 1,
-    )
-  );
 
 }
 add_action('instatwister_report_crons_event', 'instatwister_report_crons');
 
 // function instatwister_jap_add($order){
-//   $_post = Array(
+//   $post = Array(
 //     'key' => $order->token,
 //     'action' => 'add',
 //     'service' => $order->service_id,
 //     'link' => $order->link,
 //     'quantity' => $order->count,
 //   );
-//   if (is_array($post))
-//       foreach ($post as $name => $value)
-//           $_post[] = $name.'='.urlencode($value);
+//   $_post = Array();
+//   foreach ($post as $name => $value)
+//     $_post[] = $name.'='.urlencode($value);
 //   $ch = curl_init($order->server);
 //   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 //   curl_setopt($ch, CURLOPT_POST, 1);
@@ -54,29 +44,27 @@ add_action('instatwister_report_crons_event', 'instatwister_report_crons');
 //   curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 //   curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
 //   curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-//   if (is_array($post)) {
-//       curl_setopt($ch, CURLOPT_POSTFIELDS, join('&', $_post));
-//   }
+//   curl_setopt($ch, CURLOPT_POSTFIELDS, join('&', $_post));
 //   curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)');
 //   $result = curl_exec($ch);
 //   if (curl_errno($ch) != 0 && empty($result)) {
 //       $result = false;
 //   }
 //   curl_close($ch);
-//   // if ($result) {
+//   if ($result) {
 //     global $wpdb;
 //     $wpdb->update(
 //       $wpdb->prefix.'instatwister',
 //       array(
 //         'status' => 1,
-//         'status_desc' => 'dddd',//$result,
-//         'server_order_id' => 11
+//         'status_desc' => $result,
+//         'server_order_id' => json_decode($result)['order']
 //       ),
 //       array(
 //         'id' => $order->id
 //       )
 //     );
-//   // }
+//   }
 // }
 
 /*

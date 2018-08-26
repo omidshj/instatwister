@@ -21,7 +21,6 @@ include ('stat-cron.php');
 
 function instatwister_payment_complete( $order_id ) {
   $setting = get_option('instatwister_setting');
-
   $order = new WC_Order( $order_id );
   $order_data = $order->get_data();
   $products = $order->get_items();
@@ -37,10 +36,11 @@ function instatwister_payment_complete( $order_id ) {
           'product_id' => $product_id,
           'link' => $order_data['billing'][ $setting['global']['link_field'] ],
           'server' => $setting[$product_id]['server'],
+          'token' => $setting[$product_id]['token'],
           'api' =>  $setting[$product_id]['api'],
           'service_id' =>  $setting[$product_id]['service_id'],
           'count' =>  $setting[$product_id]['count'],
-          'status' => 'waiting',
+          'status' => 0,
         ),
         array(
           '%d',
@@ -51,13 +51,13 @@ function instatwister_payment_complete( $order_id ) {
           '%s',
           '%s',
           '%s',
+          '%d',
         )
       );
     }
   }
 }
-// woocommerce_review_order_after_submit
-// woocommerce_payment_complete
+// add_action( 'woocommerce_payment_complete', 'instatwister_payment_complete', 10, 1 );
 add_action( 'woocommerce_order_status_changed', 'instatwister_payment_complete', 10, 1 );
 
 function instatwister_activation() {
@@ -70,6 +70,7 @@ function instatwister_activation() {
     product_id  bigint(20) NOT NULL,
     link  text NULL,
 		server varchar(255) NULL,
+		token varchar(255) NULL,
     api varchar(255) NULL,
     service_id varchar(255) NULL,
     count varchar(255) NULL,
@@ -80,11 +81,6 @@ function instatwister_activation() {
 	) $charset_collate;";
 	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	dbDelta( $sql );
-
-  // if (! wp_next_scheduled ( 'instatwister_report_crons_event' ))
-  //   wp_schedule_event(time(), 'seven', 'instatwister_report_crons_event');
-  // if (! wp_next_scheduled ( 'instatwister_stat_crons_event' ))
-  //   wp_schedule_event(time(), 'seven', 'instatwister_stat_crons_event');
 }
 register_activation_hook( __FILE__, 'instatwister_activation' );
 

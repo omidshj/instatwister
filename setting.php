@@ -54,7 +54,7 @@ function instatwister_setting(){
 }
 
 function instatwister_setting_menu() {
-  add_submenu_page( 'woocommerce', 'instatwister setting', 'instatwister setting', 'edit_posts', 'instatwister_setting', 'instatwister_setting' );
+  add_submenu_page( 'woocommerce', 'تنظیمات instatwister', 'تنظیمات instatwister', 'edit_posts', 'instatwister_setting', 'instatwister_setting' );
 }
 add_action('admin_menu', 'instatwister_setting_menu');
 ?>
