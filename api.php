@@ -39,7 +39,7 @@ function japApiStatus($order){
     $wpdb->update(
       $wpdb->prefix.'instatwister',
       array(
-        'status' => ($data->status == 'completed')? 2: 1,
+        'status' => ($data->status == 'Completed')? 2: 1,
         'status_desc' => $result,
       ),
       array(
