@@ -3,7 +3,7 @@ function instatwister_setting(){
   if($_POST['instatwister_setting'])
     update_option('instatwister_setting', $_POST['instatwister_setting'] );
   $setting = get_option('instatwister_setting');
-  $products = wc_get_products();
+  $products = wc_get_products([]);
   ?>
   <form method="POST">
     <br>
